@@ -14,7 +14,7 @@ public class Deal {
     private int placeId;
     private String typeOfDeal;
     private String dealDescription;
-    private int createdBy;
+    private String createdBy;
 
     @Override
     public String toString() {

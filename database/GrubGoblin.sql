@@ -2,13 +2,17 @@
 
 START TRANSACTION;
 
-DROP TABLE IF EXISTS user_account, place, deal, deal_availability, availability, review CASCADE;
+DROP TABLE IF EXISTS app_user, role, place, deal, deal_availability, availability, review CASCADE;
 
-CREATE TABLE user_account (
-	user_id SERIAL PRIMARY KEY,
-	username VARCHAR(100) NOT NULL,
-	user_password VARCHAR(250) NOT NULL,
-	user_role VARCHAR(20) NOT NULL
+CREATE TABLE app_user (
+	username VARCHAR(250) PRIMARY KEY,
+	password VARCHAR(250) NOT NULL
+);
+
+CREATE TABLE role (
+	username VARCHAR(250) REFERENCES app_user(username),
+	user_role VARCHAR(250),
+	PRIMARY KEY (username, user_role)
 );
 
  CREATE TABLE place (
@@ -22,10 +26,10 @@ CREATE TABLE user_account (
 
  CREATE TABLE deal (
     deal_id SERIAL PRIMARY KEY,
-    place_id INT REFERENCES place ON DELETE CASCADE,
+    place_id INT REFERENCES place(place_id) ON DELETE CASCADE,
     type_of_deal VARCHAR(20),
     deal_description VARCHAR(150) NOT NULL,
-	 created_by int REFERENCES user_account ON DELETE CASCADE
+	created_by VARCHAR REFERENCES app_user(username) ON DELETE CASCADE
  );
 
  CREATE TABLE availability (
@@ -36,22 +40,27 @@ CREATE TABLE user_account (
  );
 
  CREATE TABLE deal_availability (
-      deal_id INT REFERENCES deal ON DELETE CASCADE,
-      availability_id INT REFERENCES availability ON DELETE CASCADE,
-      CONSTRAINT pk_deal_availability PRIMARY KEY(deal_id, availability_id)
+      deal_id INT REFERENCES deal(deal_id) ON DELETE CASCADE,
+      availability_id INT REFERENCES availability(availability_id) ON DELETE CASCADE,
+      PRIMARY KEY(deal_id, availability_id)
    );
 
  CREATE TABLE review (
     review_id SERIAL PRIMARY KEY,
-    deal_id INT REFERENCES deal ON DELETE CASCADE,
+    deal_id INT REFERENCES deal(deal_id) ON DELETE CASCADE,
     stars DECIMAL(2,1),
     review_description VARCHAR(200)
  );
  
- INSERT INTO user_account (username, user_password, user_role)
+ INSERT INTO app_user (username, password)
  VALUES 
- ('jesaca', 'forever123', 'ADMIN'), 
- ('tofu', 'forever123', 'MEMBER');
+ ('jesaca', 'forever123'), 
+ ('tofu', 'forever123');
+ 
+ INSERT INTO role (username, user_role)
+ VALUES
+ ('jesaca', 'admin'),
+ ('tofu', 'contributor');
 
 
  INSERT INTO place (place_name, address, latitude, longitude, google_rating)
@@ -64,21 +73,21 @@ CREATE TABLE user_account (
 INSERT INTO deal (place_id, type_of_deal, deal_description, created_by)
     VALUES
     -- DEAL 1
-    (1, 'drinks', '$8 cocktails, 2 types', 1),
-    (1, 'drinks', '$8 cocktails, 2 types', 1),
-    (1, 'drinks', '$8 cocktails, 2 types', 1),
-    (1, 'drinks', '$8 cocktails, 2 types', 1),
-    (1, 'drinks', '$8 cocktails, 2 types', 1),
+    (1, 'drinks', '$8 cocktails, 2 types', 'jesaca'),
+    (1, 'drinks', '$8 cocktails, 2 types', 'jesaca'),
+    (1, 'drinks', '$8 cocktails, 2 types', 'jesaca'),
+    (1, 'drinks', '$8 cocktails, 2 types', 'jesaca'),
+    (1, 'drinks', '$8 cocktails, 2 types', 'jesaca'),
     -- DEAL 2
-    (2, 'drinks', '$11 cocktails', 2),
-    (2, 'drinks', '$11 cocktails', 2),
+    (2, 'drinks', '$11 cocktails', 'tofu'),
+    (2, 'drinks', '$11 cocktails', 'tofu'),
     -- DEAL 3
-    (3, 'drinks', '50% off drinks', 1),
-    (3, 'drinks', '50% off drinks', 1),
+    (3, 'drinks', '50% off drinks', 'jesaca'),
+    (3, 'drinks', '50% off drinks', 'jesaca'),
     -- DEAL 4
-    (3, 'food', '2 course lunch set menu $25', 1),
+    (3, 'food', '2 course lunch set menu $25', 'jesaca'),
     -- DEAL 5
-    (4, 'drinks', '$8 cocktails', 2);
+    (4, 'drinks', '$8 cocktails', 'tofu');
 
 INSERT INTO availability (day_of_week, start_time, end_time)
     VALUES

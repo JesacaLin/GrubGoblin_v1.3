@@ -60,7 +60,7 @@ public class AvailabilityDAO {
         return newAvailability;
     }
 
-    public Availability updateAvailability(Availability availability) {
+    public Availability updateAvailability(int id, Availability availability) {
         Availability updatedAvailability = null;
         String sql = "UPDATE availability SET day_of_week = ?, start_time = ?, end_time = ?";
 

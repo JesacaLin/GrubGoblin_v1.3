@@ -2,8 +2,7 @@ package com.JesacaLin.GrubGoblin_v13.controllers;
 
 import com.JesacaLin.GrubGoblin_v13.daos.DealDAO;
 import com.JesacaLin.GrubGoblin_v13.models.Deal;
-import com.JesacaLin.GrubGoblin_v13.models.FullDealDetails;
-import org.springframework.scheduling.support.SimpleTriggerContext;
+import com.JesacaLin.GrubGoblin_v13.viewmodels.FullDealDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -2,7 +2,7 @@ package com.JesacaLin.GrubGoblin_v13.daos;
 
 import com.JesacaLin.GrubGoblin_v13.exception.DaoException;
 import com.JesacaLin.GrubGoblin_v13.models.Deal;
-import com.JesacaLin.GrubGoblin_v13.models.FullDealDetails;
+import com.JesacaLin.GrubGoblin_v13.viewmodels.FullDealDetails;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;

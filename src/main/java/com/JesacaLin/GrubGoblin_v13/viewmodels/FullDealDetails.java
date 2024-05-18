@@ -1,4 +1,4 @@
-package com.JesacaLin.GrubGoblin_v13.models;
+package com.JesacaLin.GrubGoblin_v13.viewmodels;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

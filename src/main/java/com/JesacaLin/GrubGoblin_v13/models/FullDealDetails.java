@@ -21,6 +21,7 @@ public class FullDealDetails {
     private LocalTime startTime;
     private double stars;
     private String reviewDescription;
+    private String createdBy;
 
     @Override
     public String toString() {
@@ -34,6 +35,7 @@ public class FullDealDetails {
                 "   START TIME = " + startTime + ",\n" +
                 "   DEAL RATING = " + stars + ",\n" +
                 "   REVIEW = " + reviewDescription + "\n" +
+                ", CREATED BY = " + createdBy +
                 "}";
     }
 }

@@ -47,12 +47,13 @@ public class UserDAO {
         return jdbcTemplate.queryForList("SELECT user_role FROM role WHERE username = ?", String.class, username);
     }
 
-    public void addRoleToUser(String username, String role) {
+    public List<String> addRoleToUser(String username, String role) {
         try {
             jdbcTemplate.update("INSERT INTO role (username, user_role) VALUES (?, ?)", username, role);
         } catch (Exception e) {
             System.out.println(username + " and " + role + " already exists!");
         }
+        return getRolesForUser(username);
     }
     public void removeRoleFromUser(String username, String role) {
         try {

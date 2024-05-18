@@ -35,6 +35,7 @@ public class UserController {
     public int deleteUser(@PathVariable String username) {
         return userDAO.deleteUser(username);
     }
+
     @GetMapping("/{username}/role")
     public List<String> getRolesForUser(@PathVariable String username) {
         return userDAO.getRolesForUser(username);

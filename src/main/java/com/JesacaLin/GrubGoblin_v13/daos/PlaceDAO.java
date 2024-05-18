@@ -59,7 +59,7 @@ public class PlaceDAO {
         return newPlace;
     }
 
-    public Place updatePlace(Place place) {
+    public Place updatePlace(int id, Place place) {
         Place updatedPlace = null;
         String sql = "UPDATE place SET place_name = ?, address = ?, latitude = ?, longitude = ?, google_rating = ? WHERE place_id = ?";
 

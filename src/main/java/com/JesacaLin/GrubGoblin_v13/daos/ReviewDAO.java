@@ -44,7 +44,7 @@ public class ReviewDAO {
         return reviews;
     }
 
-    public Review createReview(Review review) {
+    public Review createReview(Review review, int dealId) {
         Review newReview = null;
         String sql = "INSERT INTO review (deal_id, stars, review_description)" + "VALUES (?, ?, ? ) RETURNING review_id";
         try {
@@ -58,7 +58,7 @@ public class ReviewDAO {
         return newReview;
     }
 
-    public Review updateReview(Review review) {
+    public Review updateReview(int id, Review review) {
         Review updatedReview = null;
         String sql = "UPDATE review SET deal_id = ?, stars = ?, review_description = ?";
 

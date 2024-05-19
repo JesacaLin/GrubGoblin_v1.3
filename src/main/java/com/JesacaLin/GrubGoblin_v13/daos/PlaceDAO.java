@@ -34,7 +34,7 @@ public class PlaceDAO {
     public List<Place> getAllPlaces() {
         List<Place> places = new ArrayList<>();
         try {
-            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT * FROM place");
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT * FROM place ORDER BY place_id");
             while(rowSet.next()) {
                 places.add(mapRowToPlace(rowSet));
             }

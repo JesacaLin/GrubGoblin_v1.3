@@ -21,8 +21,8 @@ public class AvailabilityController {
     public Availability getAvailabilityById(@PathVariable int id) {
         return availabilityDAO.getAvailabilityById(id);
     }
-    @PostMapping
-    public Availability createAvailability(@RequestBody Availability availability, int dealId) {
+    @PostMapping("/{dealId}")
+    public Availability createAvailability(@RequestBody Availability availability, @PathVariable int dealId) {
         return availabilityDAO.createAvailability(availability, dealId);
     }
     @PutMapping("/{id}")

@@ -6,7 +6,8 @@ DROP TABLE IF EXISTS app_user, role, place, deal, deal_availability, availabilit
 
 CREATE TABLE app_user (
 	username VARCHAR(250) PRIMARY KEY,
-	password VARCHAR(250) NOT NULL
+	password VARCHAR(250) NOT NULL,
+	email VARCHAR(250)
 );
 
 CREATE TABLE role (
@@ -29,6 +30,8 @@ CREATE TABLE role (
     place_id INT REFERENCES place(place_id) ON DELETE CASCADE,
     type_of_deal VARCHAR(20),
     deal_description VARCHAR(150) NOT NULL,
+	created_at TIMESTAMP DEFAULT NOW(),
+	updated_at TIMESTAMP DEFAULT NOW(),
 	created_by VARCHAR REFERENCES app_user(username) ON DELETE CASCADE
  );
 
@@ -52,10 +55,10 @@ CREATE TABLE role (
     review_description VARCHAR(200)
  );
  
- INSERT INTO app_user (username, password)
+ INSERT INTO app_user (username, password, email)
  VALUES 
- ('jesaca', 'forever123'), 
- ('tofu', 'forever123');
+ ('jesaca', 'forever123', 'jesacalin@gmail.com'), 
+ ('tofu', 'forever123', 'tofu@gmail.com');
  
  INSERT INTO role (username, user_role)
  VALUES
@@ -70,24 +73,24 @@ CREATE TABLE role (
     ('osteria brooklyn @dekalb', '445 Albee Square Brooklyn, NY 11201', 40.690740, -73.983270, null),
     ('osteria brooklyn', '458 Myrtle Ave, Brooklyn, NY 11205', 40.693120, -73.967140, 4.6);
 
-INSERT INTO deal (place_id, type_of_deal, deal_description, created_by)
+INSERT INTO deal (place_id, type_of_deal, deal_description, created_at, created_by)
     VALUES
     -- DEAL 1
-    (1, 'drinks', '$8 cocktails, 2 types', 'jesaca'),
-    (1, 'drinks', '$8 cocktails, 2 types', 'jesaca'),
-    (1, 'drinks', '$8 cocktails, 2 types', 'jesaca'),
-    (1, 'drinks', '$8 cocktails, 2 types', 'jesaca'),
-    (1, 'drinks', '$8 cocktails, 2 types', 'jesaca'),
+    (1, 'drinks', '$8 cocktails, 2 types', '2024-05-01 00:12:00', 'jesaca'),
+    (1, 'drinks', '$8 cocktails, 2 types', '2024-05-01 00:12:00', 'jesaca'),
+    (1, 'drinks', '$8 cocktails, 2 types', '2024-05-01 00:12:00', 'jesaca'),
+    (1, 'drinks', '$8 cocktails, 2 types', '2024-05-01 00:12:00', 'jesaca'),
+    (1, 'drinks', '$8 cocktails, 2 types', '2024-05-01 00:12:00', 'jesaca'),
     -- DEAL 2
-    (2, 'drinks', '$11 cocktails', 'tofu'),
-    (2, 'drinks', '$11 cocktails', 'tofu'),
+    (2, 'drinks', '$11 cocktails', '2024-05-03 00:12:00', 'tofu'),
+    (2, 'drinks', '$11 cocktails', '2024-05-03 00:12:00', 'tofu'),
     -- DEAL 3
-    (3, 'drinks', '50% off drinks', 'jesaca'),
-    (3, 'drinks', '50% off drinks', 'jesaca'),
+    (3, 'drinks', '50% off drinks', '2024-05-05 00:12:00', 'jesaca'),
+    (3, 'drinks', '50% off drinks', '2024-05-05 00:12:00', 'jesaca'),
     -- DEAL 4
-    (3, 'food', '2 course lunch set menu $25', 'jesaca'),
+    (3, 'food', '2 course lunch set menu $25', '2024-05-07 00:12:00', 'jesaca'),
     -- DEAL 5
-    (4, 'drinks', '$8 cocktails', 'tofu');
+    (4, 'drinks', '$8 cocktails', '2024-05-08 00:12:00',  'tofu');
 
 INSERT INTO availability (day_of_week, start_time, end_time)
     VALUES

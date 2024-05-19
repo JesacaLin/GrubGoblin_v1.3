@@ -60,10 +60,10 @@ public class ReviewDAO {
 
     public Review updateReview(int id, Review review) {
         Review updatedReview = null;
-        String sql = "UPDATE review SET deal_id = ?, stars = ?, review_description = ?";
+        String sql = "UPDATE review SET deal_id = ?, stars = ?, review_description = ? WHERE review_id = ?";
 
         try {
-            int numOfRows = jdbcTemplate.update(sql, review.getDealId(), review.getStars(), review.getReviewDescription());
+            int numOfRows = jdbcTemplate.update(sql, review.getDealId(), review.getStars(), review.getReviewDescription(), review.getReviewId());
             if (numOfRows == 0) {
                 throw new DaoException("Zero rows affected, expected at least one");
             } else {

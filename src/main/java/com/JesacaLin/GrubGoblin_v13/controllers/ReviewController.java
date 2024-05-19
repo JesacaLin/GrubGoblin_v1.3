@@ -21,9 +21,9 @@ public class ReviewController {
     public Review getReviewById(@PathVariable int id) {
         return reviewDAO.getReviewById(id);
     }
-    //DO I NEED THE DEALID??
-    @PostMapping
-    public Review createReview(@RequestBody Review review, int dealId) {
+
+    @PostMapping("/{dealId}")
+    public Review createReview(@RequestBody Review review, @PathVariable int dealId) {
         return reviewDAO.createReview(review, dealId);
     }
     @PutMapping("/{id}")

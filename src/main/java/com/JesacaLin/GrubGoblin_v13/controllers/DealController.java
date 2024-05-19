@@ -4,6 +4,7 @@ import com.JesacaLin.GrubGoblin_v13.daos.DealDAO;
 import com.JesacaLin.GrubGoblin_v13.models.Deal;
 import com.JesacaLin.GrubGoblin_v13.viewmodels.FullDealDetails;
 import org.springframework.web.bind.annotation.*;
+import org.yaml.snakeyaml.events.Event;
 
 import java.util.List;
 
@@ -26,9 +27,11 @@ public class DealController {
     public Deal createDeal(@RequestBody Deal deal) {
         return dealDAO.createDeal(deal);
     }
+
+    //I REMOVED THE int id Pathvariable from update...
     @PutMapping("/{id}")
-    public Deal updateDeal(@PathVariable int id, @RequestBody Deal deal) {
-        return dealDAO.updateDeal(id, deal);
+    public Deal updateDeal(@RequestBody Deal deal) {
+        return dealDAO.updateDeal(deal);
     }
     @DeleteMapping("/{id}")
     public int deleteDeal(@PathVariable int id) {

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -21,6 +22,8 @@ public class FullDealDetails {
     private LocalTime startTime;
     private double stars;
     private String reviewDescription;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private String createdBy;
 
     @Override
@@ -35,6 +38,8 @@ public class FullDealDetails {
                 "   START TIME = " + startTime + ",\n" +
                 "   DEAL RATING = " + stars + ",\n" +
                 "   REVIEW = " + reviewDescription + "\n" +
+                ", CREATED AT = " + createdAt +
+                ", UPDATED AT = " + updatedAt +
                 ", CREATED BY = " + createdBy +
                 "}";
     }

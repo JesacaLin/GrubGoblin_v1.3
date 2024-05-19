@@ -30,12 +30,12 @@ public class UserDAO {
     }
 
     public User createUser(User user) {
-        jdbcTemplate.update("INSERT INTO app_user (username, password) VALUES (?, ?)", user.getUsername(), user.getPassword());
+        jdbcTemplate.update("INSERT INTO app_user (username, password, email) VALUES (?, ?, ?)", user.getUsername(), user.getPassword(), user.getEmail());
         return getUserByUsername(user.getUsername());
     }
 
     public User updateUser(String username, User user) {
-        jdbcTemplate.update("UPDATE app_user SET password = ? WHERE username = ?", user.getPassword(), username);
+        jdbcTemplate.update("UPDATE app_user SET password = ? WHERE username = ?", user.getPassword(), user.getEmail(), username);
         return getUserByUsername(username);
     }
 
@@ -66,6 +66,7 @@ public class UserDAO {
         User user = new User();
         user.setUsername(row.getString("username"));
         user.setPassword(row.getString("password"));
+        user.setEmail(row.getString("email"));
         return user;
     }
 }

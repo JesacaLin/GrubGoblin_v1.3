@@ -62,10 +62,10 @@ public class AvailabilityDAO {
 
     public Availability updateAvailability(int id, Availability availability) {
         Availability updatedAvailability = null;
-        String sql = "UPDATE availability SET day_of_week = ?, start_time = ?, end_time = ?";
+        String sql = "UPDATE availability SET day_of_week = ?, start_time = ?, end_time = ? WHERE availability_id = ?";
 
         try {
-            int numOfRows = jdbcTemplate.update(sql, availability.getDayOfWeek(), availability.getStartTime(), availability.getEndTime());
+            int numOfRows = jdbcTemplate.update(sql, availability.getDayOfWeek(), availability.getStartTime(), availability.getEndTime(),availability.getAvailabilityId());
             if (numOfRows == 0) {
                 throw new DaoException("Zero rows affected, expected at least one");
             } else {

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,6 +16,8 @@ public class Deal {
     private int placeId;
     private String typeOfDeal;
     private String dealDescription;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private String createdBy;
 
     @Override
@@ -23,6 +27,8 @@ public class Deal {
                 ", PLACE ID = " + placeId +
                 ", TYPE OF DEAL = " + typeOfDeal +
                 ", DEAL DESCRIPTION = " + dealDescription +
+                ", CREATED AT = " + createdAt +
+                ", UPDATED AT = " + updatedAt +
                 ", CREATED BY = " + createdBy +
                 " }";
     }

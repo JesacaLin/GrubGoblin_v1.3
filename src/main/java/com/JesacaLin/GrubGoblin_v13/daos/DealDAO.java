@@ -95,7 +95,7 @@ public class DealDAO {
     public List<FullDealDetails> getAllDealDetails() {
         List<FullDealDetails> dealDetails = new ArrayList<>();
         try {
-            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.created_at, deal.updated_at, deal.created_by \n" +
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
                     "FROM place\n" +
                     "JOIN deal ON deal.place_id = place.place_id\n" +
                     "JOIN deal_availability ON deal_availability.deal_id = deal.deal_id\n" +
@@ -116,7 +116,7 @@ public class DealDAO {
         List<FullDealDetails> deals = new ArrayList<>();
         String searchString = "%" + keyword + "%";
         try {
-            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.created_at, deal.updated_at, deal.created_by \n" +
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
                     "FROM place\n" +
                     "JOIN deal ON deal.place_id = place.place_id\n" +
                     "JOIN deal_availability ON deal_availability.deal_id = deal.deal_id\n" +
@@ -169,16 +169,10 @@ public class DealDAO {
         dealDetails.setStars(rowSet.getDouble("stars"));
         dealDetails.setReviewDescription(rowSet.getString("review_description"));
 
-        Timestamp createdAtTimestamp = rowSet.getTimestamp("created_at");
-        if (createdAtTimestamp != null) {
-            dealDetails.setCreatedAt(createdAtTimestamp.toLocalDateTime());
-        }
-
         Timestamp updatedAtTimestamp = rowSet.getTimestamp("updated_at");
         if (updatedAtTimestamp != null) {
             dealDetails.setUpdatedAt(updatedAtTimestamp.toLocalDateTime());
         }
-
         dealDetails.setCreatedBy(rowSet.getString("created_by"));
         return dealDetails;
     }

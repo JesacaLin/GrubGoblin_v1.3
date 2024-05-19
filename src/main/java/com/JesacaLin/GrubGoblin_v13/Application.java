@@ -17,8 +17,6 @@ public class Application {
 	THIS TIME'S PROJECT SCOPE:
 	*Create more ways to filter info
 		*See days based on the day of week
-	*Fix the sql diagram
-	*Add created_at timestamp... this way the deals can be checked for validness?
 	*need to try branches in git!
 
 

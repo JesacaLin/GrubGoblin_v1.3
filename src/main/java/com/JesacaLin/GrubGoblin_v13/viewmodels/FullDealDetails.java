@@ -22,7 +22,6 @@ public class FullDealDetails {
     private LocalTime startTime;
     private double stars;
     private String reviewDescription;
-    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;
 
@@ -38,7 +37,6 @@ public class FullDealDetails {
                 "   START TIME = " + startTime + ",\n" +
                 "   DEAL RATING = " + stars + ",\n" +
                 "   REVIEW = " + reviewDescription + "\n" +
-                ", CREATED AT = " + createdAt +
                 ", UPDATED AT = " + updatedAt +
                 ", CREATED BY = " + createdBy +
                 "}";

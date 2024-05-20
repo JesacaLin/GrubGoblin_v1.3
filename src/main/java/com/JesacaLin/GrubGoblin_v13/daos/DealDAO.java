@@ -15,12 +15,22 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class is a Data Access Object (DAO) for dealing with the 'deal' table in the GrubGoblin v1.3 PostgreSQL database. Will also deal with viewmodel: FullDealDetails
+ * Annotation means this class is a Spring Component, Spring will create the class if there is a need.
+ */
 @Component
 public class DealDAO {
     private JdbcTemplate jdbcTemplate;
     public DealDAO(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
+    /**
+     * Fetches all deals from the 'deal' table in the database.
+     * @return a list of all deals in the database
+     * @throws DaoException if unable to connect to the server or database
+     */
     public List<Deal> getAllDeals() {
         List<Deal> deals = new ArrayList<>();
         try {
@@ -35,6 +45,13 @@ public class DealDAO {
         return deals;
     }
 
+    /**
+     * Fetches a specific deal from the 'deal' table in the database using its ID.
+     *
+     * @param dealId the ID of the deal to fetch
+     * @return the deal with the given ID, or null if id doesn't exist
+     * @throws DaoException if unable to connect to the server or database
+     */
     public Deal getDealById (int dealId) {
         try {
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT * FROM deal WHERE deal_id = ?", dealId);
@@ -123,6 +140,49 @@ public class DealDAO {
                     "JOIN availability ON availability.availability_id = deal_availability.availability_id\n" +
                     "JOIN review ON review.deal_id = deal.deal_id\n" +
                     "WHERE deal_description LIKE ?", searchString);
+
+            while(rowSet.next()) {
+                deals.add(mapRowToDealDetails(rowSet));
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return deals;
+    }
+
+
+    public List<FullDealDetails> getAllDealByDayOfWeek(int dayOfWeek) {
+        List<FullDealDetails> deals = new ArrayList<>();
+        try {
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
+                    "FROM place\n" +
+                    "JOIN deal ON deal.place_id = place.place_id\n" +
+                    "JOIN deal_availability ON deal_availability.deal_id = deal.deal_id\n" +
+                    "JOIN availability ON availability.availability_id = deal_availability.availability_id\n" +
+                    "JOIN review ON review.deal_id = deal.deal_id\n" +
+                    "WHERE day_of_week = ?\n" +
+                    "ORDER BY start_time", dayOfWeek);
+
+            while(rowSet.next()) {
+                deals.add(mapRowToDealDetails(rowSet));
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return deals;
+    }
+
+    public List<FullDealDetails> getAllTopRatedDeals() {
+        List<FullDealDetails> deals = new ArrayList<>();
+        try {
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
+                    "FROM place\n" +
+                    "JOIN deal ON deal.place_id = place.place_id\n" +
+                    "JOIN deal_availability ON deal_availability.deal_id = deal.deal_id\n" +
+                    "JOIN availability ON availability.availability_id = deal_availability.availability_id\n" +
+                    "JOIN review ON review.deal_id = deal.deal_id\n" +
+                    "WHERE stars >= 4\n" +
+                    "ORDER BY start_time");
 
             while(rowSet.next()) {
                 deals.add(mapRowToDealDetails(rowSet));

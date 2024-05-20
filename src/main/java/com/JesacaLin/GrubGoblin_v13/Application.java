@@ -18,7 +18,8 @@ public class Application {
 	*Create more ways to filter info
 		*See days based on the day of week
 	*need to try branches in git!
-
+	*Add google api
+	*Add documentation to all my code
 
 	For demo purpses:
 	*add and save a new place all ready to go so I don't have to type it.

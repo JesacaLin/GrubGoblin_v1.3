@@ -42,9 +42,16 @@ public class DealController {
     public List<FullDealDetails> getFullDealDetails() {
         return dealDAO.getAllDealDetails();
     }
-    @GetMapping("/details/{keyword}")
+    @GetMapping("/details/keyword/{keyword}")
     public List<FullDealDetails> getFullDealDetailsByKeyword(@PathVariable String keyword) {
         return dealDAO.getAllDealByKeyword(keyword);
     }
-
+    @GetMapping("/details/day/{dayOfWeek}")
+    public List<FullDealDetails> getFullDealDetailsByDayOfWeek(@PathVariable int dayOfWeek) {
+        return dealDAO.getAllDealByDayOfWeek(dayOfWeek);
+    }
+    @GetMapping("/details/top-rated")
+    public List<FullDealDetails> getFullDealDetailsTopRated() {
+        return dealDAO.getAllTopRatedDeals();
+    }
 }

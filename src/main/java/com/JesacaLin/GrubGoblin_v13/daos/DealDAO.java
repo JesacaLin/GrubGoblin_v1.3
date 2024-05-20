@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class is a Data Access Object (DAO) for dealing with the 'deal' table in the GrubGoblin v1.3 PostgreSQL database. Will also deal with viewmodel: FullDealDetails
+ * Class is a Data Access Object (DAO) for dealing with the 'deal' table in the GrubGoblin v1.3 PostgreSQL database. Will also deal with view model: FullDealDetails
  * Annotation means this class is a Spring Component, Spring will create the class if there is a need.
  */
 @Component
@@ -28,6 +28,7 @@ public class DealDAO {
 
     /**
      * Fetches all deals from the 'deal' table in the database.
+     *
      * @return a list of all deals in the database
      * @throws DaoException if unable to connect to the server or database
      */
@@ -64,6 +65,18 @@ public class DealDAO {
         return null;
     }
 
+    /**
+     * Creates a new deal in the 'deals' table in the database.
+     *
+     * @param deal the deal to create. More info on the related Deal model: {@link Deal}. Each object need the following info:
+     *             -placeId: the ID of the place where the deal is available
+     *             -typeOfDeal: The type of deal it is
+     *             -dealDescription: a description of what the deal is
+     *             -createdBy: the user that created the deal
+     *
+     * @return the newly created deal with all details filled in.
+     * @throws DaoException if unable to connect to the server/database or data integrity violation. For ex: if placeId doesn't exist
+     */
     public Deal createDeal(Deal deal) {
         Deal newDeal = null;
         String sql = "INSERT INTO deal (place_id, type_of_deal, deal_description, created_by)" + "VALUES (?, ?, ?, ?) RETURNING deal_id";
@@ -77,7 +90,19 @@ public class DealDAO {
         }
         return newDeal;
     }
-    //I REMOVED THE int id variable from update...
+
+    /**
+     * Updates an existing deal in the 'deals' table in the database.
+     *
+     * @param deal the deal to update. More info on the related Deal model: {@link Deal}. Each object need the following info:
+     *             -placeId: the ID of the place where the deal is available
+     *             -typeOfDeal: The type of deal it is
+     *             -dealDescription: a description of what the deal is
+     *             -createdBy: the user that created the deal
+     *
+     * @return the newly updated deal with edits added.
+     * @throws DaoException if unable to connect to the server/database or data integrity violation. For ex: if placeId doesn't exist in the 'places' table.
+     */
     public Deal updateDeal(Deal deal) {
         Deal updatedDeal = null;
         String sql = "UPDATE deal SET place_id = ?, type_of_deal = ?, deal_description = ?, updated_at = NOW(), created_by = ? WHERE deal_id = ?";
@@ -97,6 +122,13 @@ public class DealDAO {
         return updatedDeal;
     }
 
+    /**
+     * Deletes an existing deal in the 'deals' table in the database.
+     *
+     * @param dealId the specific deal to delete, based on id.
+     * @return the number of rows affected. Should be 1. If returning 0, it means nothing was deleted.
+     * @throws DaoException if unable to connect to the server/database or data integrity violation. For ex: if dealId doesn't exist in the 'deal' table.
+     */
     public int deleteDealById(int dealId) {
         int numOfRows = 0;
         try {
@@ -109,6 +141,12 @@ public class DealDAO {
         return numOfRows;
     }
 
+    /**
+     * Fetches all deals from the 'deal' table, according to 'FullDealDetails' view model.
+     *
+     * @return a list of all deals in the database that conforms to the view model's required data. Full list here: {@link FullDealDetails}
+     * @throws DaoException if unable to connect to the server or database
+     */
     public List<FullDealDetails> getAllDealDetails() {
         List<FullDealDetails> dealDetails = new ArrayList<>();
         try {
@@ -129,6 +167,13 @@ public class DealDAO {
         return dealDetails;
     }
 
+    /**
+     * Fetches all deals from the 'deal' table by specific keyword, according to 'FullDealDetails' view model.
+     *
+     * @param keyword the word to search for in the deal descriptions
+     * @return a list of all deals in the database that contains the keyword and conforms to the view model's required data. Full list here: {@link FullDealDetails}
+     * @throws DaoException if unable to connect to the server or database
+     */
     public List<FullDealDetails> getAllDealByKeyword(String keyword) {
         List<FullDealDetails> deals = new ArrayList<>();
         String searchString = "%" + keyword + "%";
@@ -151,6 +196,13 @@ public class DealDAO {
     }
 
 
+    /**
+     * Fetches all deals from the 'deal' table by specific day of the week, according to 'FullDealDetails' view model.
+     * Day of the week is an int!
+     * @param dayOfWeek the specific day of the week being searched for (1 for Monday, 2 for Tuesday...etc. 8 for deals that are available all week)
+     * @return a list of all deals in the database that occurs on a specific day of the week and conforms to the view model's required data. Full list here: {@link FullDealDetails}
+     * @throws DaoException if unable to connect to the server or database
+     */
     public List<FullDealDetails> getAllDealByDayOfWeek(int dayOfWeek) {
         List<FullDealDetails> deals = new ArrayList<>();
         try {
@@ -172,6 +224,12 @@ public class DealDAO {
         return deals;
     }
 
+    /**
+     * Fetches all deals from the 'deal' table if stars rating is 4 or above, according to 'FullDealDetails' view model. Note: Star rating is the user's rating of the deal, is NOT google rating
+     *
+     * @return a list of all deals in the database that has a deal rating of 4 or higher and conforms to the view model's required data. Full list here: {@link FullDealDetails}
+     * @throws DaoException if unable to connect to the server or database
+     */
     public List<FullDealDetails> getAllTopRatedDeals() {
         List<FullDealDetails> deals = new ArrayList<>();
         try {
@@ -193,6 +251,12 @@ public class DealDAO {
         return deals;
     }
 
+    /**
+     * A utility method that maps data from a SqlRowSet, obtained from a SQL query, to a {@link Deal} object.
+     *
+     * @param rowSet a SqlRowSet containing data from a row in the 'deal' table.
+     * @return new deal object that is populated with data from the rowSet. For more info on the fields in the Deal object, see {@link Deal}.
+     */
     public Deal mapRowToDeal (SqlRowSet rowSet) {
         Deal deal = new Deal();
         deal.setDealId(rowSet.getInt("deal_id"));
@@ -214,6 +278,12 @@ public class DealDAO {
         return deal;
     }
 
+    /**
+     * A utility method that maps data from a SqlRowSet, obtained from a SQL query, to a {@link FullDealDetails} object.
+     *
+     * @param rowSet a SqlRowSet containing data from a row in the 'deal' table.
+     * @return new deal object that is populated with data from the rowSet. For more info on the fields in the Deal object, see {@link FullDealDetails}.
+     */
     public FullDealDetails mapRowToDealDetails (SqlRowSet rowSet) {
         FullDealDetails dealDetails = new FullDealDetails();
         dealDetails.setDealId(rowSet.getInt("deal_id"));

@@ -3,6 +3,7 @@ package com.JesacaLin.GrubGoblin_v13.daos;
 import com.JesacaLin.GrubGoblin_v13.models.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -13,9 +14,11 @@ import java.util.List;
 @Component
 public class UserDAO {
     private JdbcTemplate jdbcTemplate;
+    private PasswordEncoder passwordEncoder;
 
-    public UserDAO(DataSource dataSource) {
+    public UserDAO(DataSource dataSource, PasswordEncoder passwordEncoder) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getAllUsers() {
@@ -30,12 +33,14 @@ public class UserDAO {
     }
 
     public User createUser(User user) {
-        jdbcTemplate.update("INSERT INTO app_user (username, password, email) VALUES (?, ?, ?)", user.getUsername(), user.getPassword(), user.getEmail());
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        jdbcTemplate.update("INSERT INTO app_user (username, password, email) VALUES (?, ?, ?)", user.getUsername(), hashedPassword, user.getEmail());
         return getUserByUsername(user.getUsername());
     }
 
     public User updateUser(String username, User user) {
-        jdbcTemplate.update("UPDATE app_user SET password = ? WHERE username = ?", user.getPassword(), user.getEmail(), username);
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        jdbcTemplate.update("UPDATE app_user SET password = ?, email = ? WHERE username = ?", hashedPassword, user.getEmail(), username);
         return getUserByUsername(username);
     }
 

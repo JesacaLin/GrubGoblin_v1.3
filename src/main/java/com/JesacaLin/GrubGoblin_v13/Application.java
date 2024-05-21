@@ -19,7 +19,6 @@ public class Application {
 	*need to try branches in git!
 	*Add documentation to all my code
 	*Convert all old way of mapping to new style
-	*See all deals in a place
-
+	*Need viewmodel for users and roles! (let's do after auth).
 	 */
 }

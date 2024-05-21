@@ -257,7 +257,7 @@ public class DealDAO {
      * @return a list of all deals in the database that occurs at a specific place and conforms to the view model's required data. Full list here: {@link FullDealDetails}
      * @throws DaoException if unable to connect to the server or database
      */
-    public List<FullDealDetails> getAllDealByPlaceId(int place_id) {
+    public List<FullDealDetails> getAllDealDetailByPlaceId(int place_id) {
         List<FullDealDetails> deals = new ArrayList<>();
         try {
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +

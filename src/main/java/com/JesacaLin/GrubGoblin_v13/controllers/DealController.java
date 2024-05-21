@@ -54,4 +54,9 @@ public class DealController {
     public List<FullDealDetails> getFullDealDetailsTopRated() {
         return dealDAO.getAllTopRatedDeals();
     }
+
+    @GetMapping("/details/place/{place_id}")
+    public List<FullDealDetails> getFullDealDetailsFromPlace(@PathVariable int place_id) {
+        return dealDAO.getAllDealDetailByPlaceId(place_id);
+    }
 }

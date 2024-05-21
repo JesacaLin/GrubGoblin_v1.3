@@ -252,6 +252,33 @@ public class DealDAO {
     }
 
     /**
+     * Fetches all deals from the 'deal' table from a specific place, according to 'FullDealDetails' view model.
+     * @param place_id the specific place searched for.
+     * @return a list of all deals in the database that occurs at a specific place and conforms to the view model's required data. Full list here: {@link FullDealDetails}
+     * @throws DaoException if unable to connect to the server or database
+     */
+    public List<FullDealDetails> getAllDealByPlaceId(int place_id) {
+        List<FullDealDetails> deals = new ArrayList<>();
+        try {
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
+                    "FROM place\n" +
+                    "JOIN deal ON deal.place_id = place.place_id\n" +
+                    "JOIN deal_availability ON deal_availability.deal_id = deal.deal_id\n" +
+                    "JOIN availability ON availability.availability_id = deal_availability.availability_id\n" +
+                    "JOIN review ON review.deal_id = deal.deal_id\n" +
+                    "WHERE deal.place_id = ?\n" +
+                    "ORDER BY start_time", place_id);
+
+            while(rowSet.next()) {
+                deals.add(mapRowToDealDetails(rowSet));
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return deals;
+    }
+
+    /**
      * A utility method that maps data from a SqlRowSet, obtained from a SQL query, to a {@link Deal} object.
      *
      * @param rowSet a SqlRowSet containing data from a row in the 'deal' table.

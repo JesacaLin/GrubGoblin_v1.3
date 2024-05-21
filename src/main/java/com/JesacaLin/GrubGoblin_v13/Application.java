@@ -11,17 +11,15 @@ public class Application {
 	}
 
 	/*
-	LONG TERM TO DO:
-	*Need to handle deals that happen on multiple days (maybe check marks in the UI makes sense here)
+	FRONT END TO DOS:
+	*Need to handle deals that happen on multiple days (maybe check marks in the UI makes sense here).
+	*Hook up Google api, at the point of creating a place, api is called.
 
 	THIS TIME'S PROJECT SCOPE:
-	*Create more ways to filter info
-		*See days based on the day of week
 	*need to try branches in git!
 	*Add documentation to all my code
-
-	For demo purpses:
-	*add and save a new place all ready to go so I don't have to type it.
+	*Convert all old way of mapping to new style
+	*See all deals in a place
 
 	 */
 }

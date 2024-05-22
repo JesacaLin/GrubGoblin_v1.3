@@ -199,15 +199,16 @@ public class DealDAO {
      * @return a list of all deals in the database that occurs on a specific day of the week and conforms to the view model's required data. Full list here: {@link FullDealDetails}
      * @throws DaoException if unable to connect to the server or database
      */
-    public List<FullDealDetails> getAllDealByDayOfWeek(int dayOfWeek) {
+    public List<FullDealDetails> getAllDealByDayOfWeek(String dayOfWeek) {
         List<FullDealDetails> deals = new ArrayList<>();
+        String searchString = "%" + dayOfWeek + "%";
         try {
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, deal.days_of_week, deal.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
                     "FROM place\n" +
                             "JOIN deal ON deal.place_id = place.place_id\n" +
                             "JOIN review ON review.deal_id = deal.deal_id\n" +
-                    "WHERE days_of_week = ?\n" +
-                    "ORDER BY start_time", dayOfWeek);
+                    "WHERE days_of_week LIKE ?\n" +
+                    "ORDER BY review.stars", searchString);
 
             while(rowSet.next()) {
                 deals.add(mapRowToDealDetails(rowSet));

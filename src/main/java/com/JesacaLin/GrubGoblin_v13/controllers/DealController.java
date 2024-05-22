@@ -47,7 +47,7 @@ public class DealController {
         return dealDAO.getAllDealByKeyword(keyword);
     }
     @GetMapping("/details/day/{dayOfWeek}")
-    public List<FullDealDetails> getFullDealDetailsByDayOfWeek(@PathVariable int dayOfWeek) {
+    public List<FullDealDetails> getFullDealDetailsByDayOfWeek(@PathVariable String dayOfWeek) {
         return dealDAO.getAllDealByDayOfWeek(dayOfWeek);
     }
     @GetMapping("/details/top-rated")

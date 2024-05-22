@@ -47,7 +47,7 @@ public class DealController {
         return dealDAO.getAllDealByKeyword(keyword);
     }
     @GetMapping("/details/day/{dayOfWeek}")
-    public List<FullDealDetails> getFullDealDetailsByDayOfWeek(@PathVariable int dayOfWeek) {
+    public List<FullDealDetails> getFullDealDetailsByDayOfWeek(@PathVariable String dayOfWeek) {
         return dealDAO.getAllDealByDayOfWeek(dayOfWeek);
     }
     @GetMapping("/details/top-rated")
@@ -58,5 +58,9 @@ public class DealController {
     @GetMapping("/details/place/{place_id}")
     public List<FullDealDetails> getFullDealDetailsFromPlace(@PathVariable int place_id) {
         return dealDAO.getAllDealDetailByPlaceId(place_id);
+    }
+    @GetMapping("/details/deal/{deal_id}")
+    public List<FullDealDetails> getFullDealDetailsFromDealId(@PathVariable int deal_id) {
+        return dealDAO.getAllDealDetailByDealId(deal_id);
     }
 }

@@ -46,9 +46,9 @@ public class ReviewDAO {
 
     public Review createReview(Review review, int dealId) {
         Review newReview = null;
-        String sql = "INSERT INTO review (deal_id, stars, review_description)" + "VALUES (?, ?, ? ) RETURNING review_id";
+        String sql = "INSERT INTO review (deal_id, stars, review_description, reviewed_by)" + "VALUES (?, ?, ?, ? ) RETURNING review_id";
         try {
-            int reviewId = jdbcTemplate.queryForObject(sql, int.class, review.getDealId(), review.getStars(), review.getReviewDescription());
+            int reviewId = jdbcTemplate.queryForObject(sql, int.class, review.getDealId(), review.getStars(), review.getReviewDescription(), review.getReviewedBy());
             newReview = getReviewById(reviewId);
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -60,10 +60,10 @@ public class ReviewDAO {
 
     public Review updateReview(int id, Review review) {
         Review updatedReview = null;
-        String sql = "UPDATE review SET deal_id = ?, stars = ?, review_description = ? WHERE review_id = ?";
+        String sql = "UPDATE review SET deal_id = ?, stars = ?, review_description = ?, reviewed_by = ? WHERE review_id = ?";
 
         try {
-            int numOfRows = jdbcTemplate.update(sql, review.getDealId(), review.getStars(), review.getReviewDescription(), review.getReviewId());
+            int numOfRows = jdbcTemplate.update(sql, review.getDealId(), review.getStars(), review.getReviewDescription(), review.getReviewedBy(), review.getReviewId());
             if (numOfRows == 0) {
                 throw new DaoException("Zero rows affected, expected at least one");
             } else {
@@ -89,12 +89,26 @@ public class ReviewDAO {
         return numOfRows;
     }
 
+    public List<Review> getAllReviewsByDealId(int dealId) {
+        List<Review> reviews = new ArrayList<>();
+        try {
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT * FROM review WHERE deal_id = ?", dealId);
+            while(rowSet.next()) {
+                reviews.add(mapRowToReview(rowSet));
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return reviews;
+    }
+
     public Review mapRowToReview (SqlRowSet rowSet) {
         Review review = new Review();
         review.setReviewId(rowSet.getInt("review_id"));
         review.setDealId(rowSet.getInt("deal_id"));
         review.setStars(rowSet.getDouble("stars"));
         review.setReviewDescription(rowSet.getString("review_description"));
+        review.setReviewedBy(rowSet.getString("reviewed_by"));
         return review;
     }
 }

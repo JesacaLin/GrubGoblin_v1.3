@@ -79,9 +79,9 @@ public class DealDAO {
      */
     public Deal createDeal(Deal deal) {
         Deal newDeal = null;
-        String sql = "INSERT INTO deal (place_id, type_of_deal, deal_description, created_by)" + "VALUES (?, ?, ?, ?) RETURNING deal_id";
+        String sql = "INSERT INTO deal (place_id, type_of_deal, deal_description, days_of_week, start_time, end_time, created_by)" + "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING deal_id";
         try {
-            int dealId = jdbcTemplate.queryForObject(sql, int.class, deal.getPlaceId(), deal.getTypeOfDeal(), deal.getDealDescription(), deal.getCreatedBy());
+            int dealId = jdbcTemplate.queryForObject(sql, int.class, deal.getPlaceId(), deal.getTypeOfDeal(), deal.getDealDescription(), deal.getDaysOfWeek(), deal.getStartTime(), deal.getEndTime(), deal.getCreatedBy());
             newDeal = getDealById(dealId);
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -105,10 +105,10 @@ public class DealDAO {
      */
     public Deal updateDeal(Deal deal) {
         Deal updatedDeal = null;
-        String sql = "UPDATE deal SET place_id = ?, type_of_deal = ?, deal_description = ?, updated_at = NOW(), created_by = ? WHERE deal_id = ?";
+        String sql = "UPDATE deal SET place_id = ?, type_of_deal = ?, deal_description = ?, days_of_week =?, start_time = ?, end_time = ?, updated_at = NOW(), created_by = ? WHERE deal_id = ?";
 
         try {
-            int numOfRows = jdbcTemplate.update(sql, deal.getPlaceId(), deal.getTypeOfDeal(), deal.getDealDescription(), deal.getCreatedBy(), deal.getDealId());
+            int numOfRows = jdbcTemplate.update(sql, deal.getPlaceId(), deal.getTypeOfDeal(), deal.getDealDescription(), deal.getDaysOfWeek(), deal.getStartTime(), deal.getEndTime(), deal.getCreatedBy(), deal.getDealId());
             if (numOfRows == 0) {
                 throw new DaoException("Zero rows affected, expected at least one");
             } else {
@@ -150,11 +150,9 @@ public class DealDAO {
     public List<FullDealDetails> getAllDealDetails() {
         List<FullDealDetails> dealDetails = new ArrayList<>();
         try {
-            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, deal.days_of_week, deal.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
                     "FROM place\n" +
                     "JOIN deal ON deal.place_id = place.place_id\n" +
-                    "JOIN deal_availability ON deal_availability.deal_id = deal.deal_id\n" +
-                    "JOIN availability ON availability.availability_id = deal_availability.availability_id\n" +
                     "JOIN review ON review.deal_id = deal.deal_id\n" +
                     "ORDER BY deal_id");
 
@@ -178,11 +176,9 @@ public class DealDAO {
         List<FullDealDetails> deals = new ArrayList<>();
         String searchString = "%" + keyword + "%";
         try {
-            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, deal.days_of_week, deal.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
                     "FROM place\n" +
                     "JOIN deal ON deal.place_id = place.place_id\n" +
-                    "JOIN deal_availability ON deal_availability.deal_id = deal.deal_id\n" +
-                    "JOIN availability ON availability.availability_id = deal_availability.availability_id\n" +
                     "JOIN review ON review.deal_id = deal.deal_id\n" +
                     "WHERE deal_description LIKE ?", searchString);
 
@@ -203,17 +199,16 @@ public class DealDAO {
      * @return a list of all deals in the database that occurs on a specific day of the week and conforms to the view model's required data. Full list here: {@link FullDealDetails}
      * @throws DaoException if unable to connect to the server or database
      */
-    public List<FullDealDetails> getAllDealByDayOfWeek(int dayOfWeek) {
+    public List<FullDealDetails> getAllDealByDayOfWeek(String dayOfWeek) {
         List<FullDealDetails> deals = new ArrayList<>();
+        String searchString = "%" + dayOfWeek + "%";
         try {
-            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, deal.days_of_week, deal.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
                     "FROM place\n" +
-                    "JOIN deal ON deal.place_id = place.place_id\n" +
-                    "JOIN deal_availability ON deal_availability.deal_id = deal.deal_id\n" +
-                    "JOIN availability ON availability.availability_id = deal_availability.availability_id\n" +
-                    "JOIN review ON review.deal_id = deal.deal_id\n" +
-                    "WHERE day_of_week = ?\n" +
-                    "ORDER BY start_time", dayOfWeek);
+                            "JOIN deal ON deal.place_id = place.place_id\n" +
+                            "JOIN review ON review.deal_id = deal.deal_id\n" +
+                    "WHERE days_of_week LIKE ?\n" +
+                    "ORDER BY review.stars", searchString);
 
             while(rowSet.next()) {
                 deals.add(mapRowToDealDetails(rowSet));
@@ -233,12 +228,10 @@ public class DealDAO {
     public List<FullDealDetails> getAllTopRatedDeals() {
         List<FullDealDetails> deals = new ArrayList<>();
         try {
-            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, deal.days_of_week, deal.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
                     "FROM place\n" +
-                    "JOIN deal ON deal.place_id = place.place_id\n" +
-                    "JOIN deal_availability ON deal_availability.deal_id = deal.deal_id\n" +
-                    "JOIN availability ON availability.availability_id = deal_availability.availability_id\n" +
-                    "JOIN review ON review.deal_id = deal.deal_id\n" +
+                            "JOIN deal ON deal.place_id = place.place_id\n" +
+                            "JOIN review ON review.deal_id = deal.deal_id\n" +
                     "WHERE stars >= 4\n" +
                     "ORDER BY start_time");
 
@@ -260,14 +253,31 @@ public class DealDAO {
     public List<FullDealDetails> getAllDealDetailByPlaceId(int place_id) {
         List<FullDealDetails> deals = new ArrayList<>();
         try {
-            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, availability.day_of_week, availability.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, deal.days_of_week, deal.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
                     "FROM place\n" +
-                    "JOIN deal ON deal.place_id = place.place_id\n" +
-                    "JOIN deal_availability ON deal_availability.deal_id = deal.deal_id\n" +
-                    "JOIN availability ON availability.availability_id = deal_availability.availability_id\n" +
-                    "JOIN review ON review.deal_id = deal.deal_id\n" +
+                            "JOIN deal ON deal.place_id = place.place_id\n" +
+                            "JOIN review ON review.deal_id = deal.deal_id\n" +
                     "WHERE deal.place_id = ?\n" +
                     "ORDER BY start_time", place_id);
+
+            while(rowSet.next()) {
+                deals.add(mapRowToDealDetails(rowSet));
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return deals;
+    }
+
+    public List<FullDealDetails> getAllDealDetailByDealId(int deal_id) {
+        List<FullDealDetails> deals = new ArrayList<>();
+        try {
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, deal.days_of_week, deal.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
+                    "FROM place\n" +
+                    "JOIN deal ON deal.place_id = place.place_id\n" +
+                    "JOIN review ON review.deal_id = deal.deal_id\n" +
+                    "WHERE deal.deal_id = ?\n" +
+                    "ORDER BY review.stars", deal_id);
 
             while(rowSet.next()) {
                 deals.add(mapRowToDealDetails(rowSet));
@@ -290,6 +300,16 @@ public class DealDAO {
         deal.setPlaceId(rowSet.getInt("place_id"));
         deal.setTypeOfDeal(rowSet.getString("type_of_deal"));
         deal.setDealDescription((rowSet.getString("deal_description")));
+        deal.setDaysOfWeek(rowSet.getString("days_Of_Week"));
+
+        Time sqlStartTime = rowSet.getTime("start_time");
+        if (sqlStartTime != null) {
+            deal.setStartTime(sqlStartTime.toLocalTime());
+        }
+        Time sqlEndTime = rowSet.getTime("end_time");
+        if (sqlEndTime != null) {
+            deal.setEndTime(sqlEndTime.toLocalTime());
+        }
 
         Timestamp createdAtTimestamp = rowSet.getTimestamp("created_at");
         if (createdAtTimestamp != null) {
@@ -318,7 +338,7 @@ public class DealDAO {
         dealDetails.setAddress(rowSet.getString("address"));
         dealDetails.setTypeOfDeal(rowSet.getString("type_of_deal"));
         dealDetails.setDealDescription((rowSet.getString("deal_description")));
-        dealDetails.setDayOfWeek(rowSet.getInt("day_of_week"));
+        dealDetails.setDaysOfWeek(rowSet.getString("days_of_week"));
         Time sqlStartTime = rowSet.getTime("start_time");
         if (sqlStartTime != null) {
             dealDetails.setStartTime(sqlStartTime.toLocalTime());

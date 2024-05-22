@@ -290,6 +290,16 @@ public class DealDAO {
         deal.setPlaceId(rowSet.getInt("place_id"));
         deal.setTypeOfDeal(rowSet.getString("type_of_deal"));
         deal.setDealDescription((rowSet.getString("deal_description")));
+        deal.setDaysOfWeek(rowSet.getString("daysOfWeek"));
+
+        Time sqlStartTime = rowSet.getTime("start_time");
+        if (sqlStartTime != null) {
+            deal.setStartTime(sqlStartTime.toLocalTime());
+        }
+        Time sqlEndTime = rowSet.getTime("end_time");
+        if (sqlEndTime != null) {
+            deal.setEndTime(sqlEndTime.toLocalTime());
+        }
 
         Timestamp createdAtTimestamp = rowSet.getTimestamp("created_at");
         if (createdAtTimestamp != null) {
@@ -318,7 +328,7 @@ public class DealDAO {
         dealDetails.setAddress(rowSet.getString("address"));
         dealDetails.setTypeOfDeal(rowSet.getString("type_of_deal"));
         dealDetails.setDealDescription((rowSet.getString("deal_description")));
-        dealDetails.setDayOfWeek(rowSet.getInt("day_of_week"));
+        dealDetails.setDaysOfWeek(rowSet.getString("days_of_week"));
         Time sqlStartTime = rowSet.getTime("start_time");
         if (sqlStartTime != null) {
             dealDetails.setStartTime(sqlStartTime.toLocalTime());

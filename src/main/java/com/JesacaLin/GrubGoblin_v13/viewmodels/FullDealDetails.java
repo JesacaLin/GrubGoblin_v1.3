@@ -18,7 +18,7 @@ public class FullDealDetails {
     private String address;
     private String typeOfDeal;
     private String dealDescription;
-    private int dayOfWeek;
+    private String daysOfWeek;
     private LocalTime startTime;
     private double stars;
     private String reviewDescription;
@@ -33,7 +33,7 @@ public class FullDealDetails {
                 "   ADDRESS = " + address + ",\n" +
                 "   TYPE OF DEAL = " + typeOfDeal + ",\n" +
                 "   DEAL DESCRIPTION = " + dealDescription + ",\n" +
-                "   DAY OF THE WEEK = " + dayOfWeek + ",\n" +
+                "   DAY OF THE WEEK = " + daysOfWeek + ",\n" +
                 "   START TIME = " + startTime + ",\n" +
                 "   DEAL RATING = " + stars + ",\n" +
                 "   REVIEW = " + reviewDescription + "\n" +

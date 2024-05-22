@@ -268,6 +268,25 @@ public class DealDAO {
         return deals;
     }
 
+    public List<FullDealDetails> getAllDealDetailByDealId(int deal_id) {
+        List<FullDealDetails> deals = new ArrayList<>();
+        try {
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT deal.deal_id, place_name, address, deal.type_of_deal, deal.deal_description, deal.days_of_week, deal.start_time, review.stars, review.review_description, deal.updated_at, deal.created_by \n" +
+                    "FROM place\n" +
+                    "JOIN deal ON deal.place_id = place.place_id\n" +
+                    "JOIN review ON review.deal_id = deal.deal_id\n" +
+                    "WHERE deal.deal_id = ?\n" +
+                    "ORDER BY review.stars", deal_id);
+
+            while(rowSet.next()) {
+                deals.add(mapRowToDealDetails(rowSet));
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return deals;
+    }
+
     /**
      * A utility method that maps data from a SqlRowSet, obtained from a SQL query, to a {@link Deal} object.
      *

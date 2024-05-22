@@ -14,6 +14,7 @@ public class Review {
     private int dealId;
     private double stars;
     private String reviewDescription;
+    private String reviewedBy;
 
     @Override
     public String toString() {
@@ -22,6 +23,7 @@ public class Review {
                 ", DEAL ID = " + dealId +
                 ", STARS = " + stars +
                 ", REVIEW DESCRIPTION = " + reviewDescription +
+                ", REVIEWED BY = " + reviewedBy +
                 " }";
     }
 }

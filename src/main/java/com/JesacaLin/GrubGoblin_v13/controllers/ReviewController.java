@@ -34,4 +34,9 @@ public class ReviewController {
     public int deleteReview(@PathVariable int id) {
         return reviewDAO.deleteReviewById(id);
     }
+
+    @GetMapping("/deal/{dealId}")
+    public List<Review> getReviewByDealId(@PathVariable int dealId) {
+        return reviewDAO.getAllReviewsByDealId(dealId);
+    }
 }

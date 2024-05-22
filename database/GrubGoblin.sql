@@ -42,7 +42,7 @@ CREATE TABLE role (
     review_id SERIAL PRIMARY KEY,
     deal_id INT REFERENCES deal(deal_id) ON DELETE CASCADE,
     stars DECIMAL(2,1),
-    review_description VARCHAR(200)
+    review_description VARCHAR(200),
 	reviewed_by VARCHAR REFERENCES app_user(username) ON DELETE CASCADE
  );
  
@@ -69,22 +69,22 @@ CREATE TABLE role (
 INSERT INTO deal (place_id, type_of_deal, deal_description, days_of_week, start_time, end_time, created_at, created_by)
     VALUES
     -- DEAL 1
-    (1, 'drinks', '$8 cocktails, 2 types', 'mtwhf', '17:00:00', '19:00:00, '2024-05-01 00:12:00', 'jesaca'),
+    (1, 'drinks', '$8 cocktails, 2 types', 'mtwhf', '17:00:00', '19:00:00', '2024-05-01 00:12:00', 'jesaca'),
    
     -- DEAL 2
-    (2, 'drinks', '$11 cocktails', 'mtwhf', '17:00:00', '20:00:00', '2024-05-03 00:12:00', 'tofu'),
+    (2, 'drinks', '$11 cocktails', 'mtwhf', '18:00:00', '20:00:00', '2024-05-03 00:12:00', 'tofu'),
    
     -- DEAL 3
-    (3, 'drinks', '50% off drinks', 'mtwhf', '17:00:00', '20:00:00', '2024-05-05 00:12:00', 'jesaca'),
+    (3, 'drinks', '50% off drinks', 'mtwhf', '00:00:00', '00:00:00', '2024-05-05 00:12:00', 'jesaca'),
    
     -- DEAL 4
-    (3, 'food', '2 course lunch set menu $25', 'su', '17:00:00', '20:00:00', '2024-05-07 00:12:00', 'jesaca'),
+    (3, 'food', '2 course lunch set menu $25', 'su', '11:00:00', '15:00:00', '2024-05-07 00:12:00', 'jesaca'),
 	 
     -- DEAL 5
-    (4, 'drinks', '$8 cocktails', 'mtw', '17:00:00', '20:00:00', '2024-05-08 00:12:00',  'tofu');
+    (4, 'drinks', '$8 cocktails', 'mtw', '16:00:00', '19:00:00', '2024-05-08 00:12:00',  'tofu');
 
 
-INSERT INTO review ( deal_id, stars,review_description, reviewed_by)
+INSERT INTO review ( deal_id, stars, review_description, reviewed_by)
     VALUES
     (1, 3.9, 'The happy hour drinks were ok, their full price cocktails are much better!', 'jesaca'),
 	(1, 4.2, 'The happy hour is solid enough I can pop in and enjoy my book in the cozy vibe', 'tofu'),
@@ -92,7 +92,7 @@ INSERT INTO review ( deal_id, stars,review_description, reviewed_by)
     (3, 3.0, 'Good place to get a quick drink if you need to rest while shopping, nothing to write home about.', 'tofu'),
     (4, 4.5, 'Very large portions so the deal is worth it!', 'jesaca'),
 	 (4, 2.5, 'I can make better pasta than this, very bland!', 'jesaca'),
-    (5, 4.0, 'Love the vibe here, good place for drinks with friends. Drinks are STRONG!', 'tofu');
+    (5, 4.0, 'Love the vibe here, good place for drinks with friends. Drinks are STRONG!', 'tofu'),
 	 (5, 5.0, 'If you have a lot of different dates, bring them here. Cheap!!', 'tofu');
 
 COMMIT;

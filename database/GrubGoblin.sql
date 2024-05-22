@@ -57,8 +57,8 @@ CREATE TABLE role (
  
  INSERT INTO app_user (username, password, email)
  VALUES 
- ('jesaca', 'forever123', 'jesacalin@gmail.com'), 
- ('tofu', 'forever123', 'tofu@gmail.com');
+ ('jesaca', '$2a$10$vHEyGfKbCUDC1ZzVY3uR0emfjHG2GBdMVTtBfFZxkUXWVLagdfQTC', 'jesacalin@gmail.com'), 
+ ('tofu', '$2a$10$XQenfZZ7kSDVuZev0ktlCuREIYNtiX4c1qR/YCsn4Kz2ydkw0Mp76', 'tofu@gmail.com');
  
  INSERT INTO role (username, user_role)
  VALUES
@@ -144,8 +144,8 @@ INSERT INTO review ( deal_id, stars,review_description)
     (5, 3.9, 'The happy hour drinks were ok, their full price cocktails are much better!'),
     (6, 4.5, 'Solid cocktails and friendly service. Wish it was a dollar or two less. The charcuterie is worth getting.'),
     (7, 4.5, 'Solid cocktails and friendly service. Wish it was a dollar or two less. The charcuterie is worth getting.'),
-    (8, 3.0, 'Good place to get a quick drink if you need to rest while shopping, nothing to write home about.' ),
-    (9, 3.0, 'Good place to get a quick drink if you need to rest while shopping, nothing to write home about.' ),
+    (8, 3.0, 'Good place to get a quick drink if you need to rest while shopping, nothing to write home about.'),
+    (9, 3.0, 'Good place to get a quick drink if you need to rest while shopping, nothing to write home about.'),
     (10, 3.0, 'Very large portions so the deal is worth it!'),
     (11, 4.0, 'Love the vibe here, good place for drinks with friends. Drinks are STRONG!');
 

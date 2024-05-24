@@ -3,11 +3,13 @@ package com.JesacaLin.GrubGoblin_v13.controllers;
 import com.JesacaLin.GrubGoblin_v13.daos.DealDAO;
 import com.JesacaLin.GrubGoblin_v13.models.Deal;
 import com.JesacaLin.GrubGoblin_v13.viewmodels.FullDealDetails;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yaml.snakeyaml.events.Event;
 
 import java.util.List;
 
+//@PreAuthorize("isAuthenticated()")
 @RestController
 @RequestMapping("/deal")
 public class DealController {
@@ -33,6 +35,8 @@ public class DealController {
     public Deal updateDeal(@RequestBody Deal deal) {
         return dealDAO.updateDeal(deal);
     }
+
+    //@PreAuthorize("hasAuthority('admin')")
     @DeleteMapping("/{id}")
     public int deleteDeal(@PathVariable int id) {
         return dealDAO.deleteDealById(id);

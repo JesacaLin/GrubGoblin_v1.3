@@ -22,8 +22,9 @@ public class UserDAO {
     }
 
     public List<User> getAllUsers() {
-        return jdbcTemplate.query("SELECT * FROM app_user", this::mapRowToUser);
+        return jdbcTemplate.query("SELECT * FROM app_user ORDER BY username", this::mapRowToUser);
     }
+
     public User getUserByUsername(String username) {
         try {
             return jdbcTemplate.queryForObject("SELECT * FROM app_user WHERE username = ?",this::mapRowToUser, username);
@@ -32,10 +33,15 @@ public class UserDAO {
         }
     }
 
+
     public User createUser(User user) {
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
-        jdbcTemplate.update("INSERT INTO app_user (username, password, email) VALUES (?, ?, ?)", user.getUsername(), hashedPassword, user.getEmail());
-        return getUserByUsername(user.getUsername());
+        try {
+            String hashedPassword = passwordEncoder.encode(user.getPassword());
+            jdbcTemplate.update("INSERT INTO app_user (username, password, email) VALUES (?, ?, ?)", user.getUsername(), hashedPassword, user.getEmail());
+            return getUserByUsername(user.getUsername());
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public User updateUser(String username, User user) {

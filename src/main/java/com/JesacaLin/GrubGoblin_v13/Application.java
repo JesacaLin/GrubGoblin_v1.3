@@ -16,9 +16,8 @@ public class Application {
 	*Hook up Google api, at the point of creating a place, api is called.
 
 	THIS TIME'S PROJECT SCOPE:
-	*need to try branches in git!
-	*Add documentation to all my code
-	*Convert all old way of mapping to new style
-	*Need viewmodel for users and roles! (let's do after auth).
+	*1. Let's do full auth now
+	*2. Add documentation to all my code
+	*3. Convert all old way of mapping to new style
 	 */
 }

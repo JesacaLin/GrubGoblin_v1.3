@@ -2,10 +2,12 @@ package com.JesacaLin.GrubGoblin_v13.controllers;
 
 import com.JesacaLin.GrubGoblin_v13.daos.UserDAO;
 import com.JesacaLin.GrubGoblin_v13.models.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/app_user")
 public class UserController {
@@ -21,12 +23,17 @@ public class UserController {
     }
     @GetMapping("/{username}")
     public User getUserByUsername(@PathVariable String username) {
-        return userDAO.getUserByUsername(username);
+        User user = userDAO.getUserByUsername(username);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        return user;
     }
     @PostMapping
     public User createUser(@RequestBody User user) {
         return userDAO.createUser(user);
     }
+
     @PutMapping("/{username}")
     public User updateUser(@PathVariable String username, @RequestBody User user) {
         return userDAO.updateUser(username, user);

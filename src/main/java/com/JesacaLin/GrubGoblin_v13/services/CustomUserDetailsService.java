@@ -12,12 +12,28 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class loads users for the authentication system.
+ */
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
+    /**
+     * The DAO used to access user data
+     */
    private UserDAO userDAO;
+    /**
+     * Class constructor, creates a new instance of the class.
+     */
     public CustomUserDetailsService(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
+
+    /**
+     * Load a user by their username
+     * @param username The username to load
+     * @return The user details as a jwtUser
+     * @throws UsernameNotFoundException if the user is not found
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User dbUser = userDAO.getUserByUsername(username);

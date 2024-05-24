@@ -11,7 +11,7 @@ CREATE TABLE app_user (
 );
 
 CREATE TABLE role (
-	username VARCHAR(250) REFERENCES app_user(username),
+	username VARCHAR(250) REFERENCES app_user(username) ON DELETE CASCADE,
 	user_role VARCHAR(250),
 	PRIMARY KEY (username, user_role)
 );

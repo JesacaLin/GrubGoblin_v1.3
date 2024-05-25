@@ -48,12 +48,12 @@ public class DealDAO {
 
     /**
      * Fetches a specific deal from the 'deal' table in the database using its ID.
-     *
+            *
      * @param dealId the ID of the deal to fetch
      * @return the deal with the given ID, or null if id doesn't exist
-     * @throws DaoException if unable to connect to the server or database
+                * @throws DaoException if unable to connect to the server or database
      */
-    public Deal getDealById (int dealId) {
+        public Deal getDealById (int dealId) {
         try {
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT * FROM deal WHERE deal_id = ?", dealId);
             if (rowSet.next()) {

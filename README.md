@@ -34,5 +34,3 @@ GrubGoblin is a full-stack web application under development, designed to empowe
 
 We encourage you to report any bugs or issues you encounter. Please submit them through the GitHub issue tracker for this project.
 
-We're actively developing GrubGoblin. Stay tuned for exciting updates!
-

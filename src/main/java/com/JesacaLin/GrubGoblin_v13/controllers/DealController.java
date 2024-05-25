@@ -3,8 +3,10 @@ package com.JesacaLin.GrubGoblin_v13.controllers;
 import com.JesacaLin.GrubGoblin_v13.daos.DealDAO;
 import com.JesacaLin.GrubGoblin_v13.models.Deal;
 import com.JesacaLin.GrubGoblin_v13.viewmodels.FullDealDetails;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
@@ -38,7 +40,14 @@ public class DealController {
 
     @PreAuthorize("hasAuthority('contributor') or hasAuthority('admin')")
     @PutMapping("/{id}")
-    public Deal updateDeal(@RequestBody Deal deal) {
+    public Deal updateDeal(@RequestBody Deal deal, Principal principal) {
+        Deal existingDeal = dealDAO.getDealById(deal.getDealId());
+        if (existingDeal == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Deal not found");
+        }
+        if (!existingDeal.getCreatedBy().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to update this deal");
+        }
         return dealDAO.updateDeal(deal);
     }
 

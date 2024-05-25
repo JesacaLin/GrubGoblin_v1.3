@@ -12,6 +12,9 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO class for managing Place entities in the database.
+ */
 @Component
 public class PlaceDAO {
     private JdbcTemplate jdbcTemplate;

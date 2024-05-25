@@ -7,9 +7,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yaml.snakeyaml.events.Event;
 
+import java.security.Principal;
 import java.util.List;
 
-//@PreAuthorize("isAuthenticated()")
+@PreAuthorize("isAuthenticated()")
 @RestController
 @RequestMapping("/deal")
 public class DealController {
@@ -17,26 +18,32 @@ public class DealController {
     public DealController(DealDAO dealDAO) {
         this.dealDAO = dealDAO;
     }
+
+//    @PreAuthorize("isAuthenticated()")
     @GetMapping("")
     public List<Deal> listOfDeals() {
         return dealDAO.getAllDeals();
     }
+
     @GetMapping("/{id}")
     public Deal getDealById(@PathVariable int id) {
         return dealDAO.getDealById(id);
     }
+
+
     @PostMapping
-    public Deal createDeal(@RequestBody Deal deal) {
+    public Deal createDeal(@RequestBody Deal deal, Principal principal) {
+        String userName = principal.getName();
+        deal.setCreatedBy(userName);
         return dealDAO.createDeal(deal);
     }
 
-    //I REMOVED THE int id Pathvariable from update...
     @PutMapping("/{id}")
     public Deal updateDeal(@RequestBody Deal deal) {
         return dealDAO.updateDeal(deal);
     }
 
-    //@PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     @DeleteMapping("/{id}")
     public int deleteDeal(@PathVariable int id) {
         return dealDAO.deleteDealById(id);

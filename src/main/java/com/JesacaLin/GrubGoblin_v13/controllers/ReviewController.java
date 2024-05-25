@@ -4,6 +4,7 @@ import com.JesacaLin.GrubGoblin_v13.daos.ReviewDAO;
 import com.JesacaLin.GrubGoblin_v13.models.Review;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,9 @@ public class ReviewController {
     }
 
     @PostMapping("/{dealId}")
-    public Review createReview(@RequestBody Review review, @PathVariable int dealId) {
+    public Review createReview(@RequestBody Review review, @PathVariable int dealId, Principal principal) {
+        String userName = principal.getName();
+        review.setReviewedBy(userName);
         return reviewDAO.createReview(review, dealId);
     }
     @PutMapping("/{id}")

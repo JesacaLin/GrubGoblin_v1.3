@@ -66,17 +66,20 @@ public class DealDAO {
     }
 
     /**
-     * Creates a new deal in the 'deals' table in the database.
-     *
-     * @param deal the deal to create. More info on the related Deal model: {@link Deal}. Each object need the following info:
-     *             -placeId: the ID of the place where the deal is available
-     *             -typeOfDeal: The type of deal it is
-     *             -dealDescription: a description of what the deal is
-     *             -createdBy: the user that created the deal
-     *
-     * @return the newly created deal with all details filled in.
-     * @throws DaoException if unable to connect to the server/database or data integrity violation. For ex: if placeId doesn't exist
-     */
+ * Creates a new deal in the 'deals' table in the database.
+ *
+ * @param deal the deal to create. More info on the related Deal model: {@link Deal}. Each object now includes the following info:
+ *            - placeId: the ID of the place where the deal is available
+ *            - typeOfDeal: The type of deal it is
+ *            - dealDescription: a description of what the deal is
+ *            - daysOfWeek: The days of the week the deal is available (e.g., "M, Tu, W, Th, F")
+ *            - startTime: The start time of the deal (e.g., "10:00:00")
+ *            - endTime: The end time of the deal (e.g., "17:00:00")
+ *            - createdBy: the user that created the deal
+ *
+ * @return the newly created deal with all details filled in.
+ * @throws DaoException if unable to connect to the server/database or data integrity violation. For example, if placeId doesn't exist
+ */
     public Deal createDeal(Deal deal) {
         Deal newDeal = null;
         String sql = "INSERT INTO deal (place_id, type_of_deal, deal_description, days_of_week, start_time, end_time, created_by)" + "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING deal_id";
@@ -92,17 +95,20 @@ public class DealDAO {
     }
 
     /**
-     * Updates an existing deal in the 'deals' table in the database.
-     *
-     * @param deal the deal to update. More info on the related Deal model: {@link Deal}. Each object need the following info:
-     *             -placeId: the ID of the place where the deal is available
-     *             -typeOfDeal: The type of deal it is
-     *             -dealDescription: a description of what the deal is
-     *             -createdBy: the user that created the deal
-     *
-     * @return the newly updated deal with edits added.
-     * @throws DaoException if unable to connect to the server/database or data integrity violation. For ex: if placeId doesn't exist in the 'places' table.
-     */
+ * Updates an existing deal in the 'deals' table in the database.
+ *
+ * @param deal the deal to update. More info on the related Deal model: {@link Deal}. Each object needs the following info:
+ *            - placeId: the ID of the place where the deal is available (**This field cannot be updated**).
+ *            - typeOfDeal: The type of deal it is
+ *            - dealDescription: a description of what the deal is
+ *            - daysOfWeek: The days of the week the deal is available (e.g., "M, Tu, W, Th, F")
+ *            - startTime: The start time of the deal (e.g., "10:00:00")
+ *            - endTime: The end time of the deal (e.g., "17:00:00")
+ *            - createdBy: the user that created the deal (**This field cannot be updated**)
+ *
+ * @return the newly updated deal with edits added.
+ * @throws DaoException if unable to connect to the server/database, data integrity violation (e.g., placeId doesn't exist in the 'places' table), or if the updating user is not the creator of the deal.
+ */
     public Deal updateDeal(Deal deal) {
         Deal updatedDeal = null;
         String sql = "UPDATE deal SET place_id = ?, type_of_deal = ?, deal_description = ?, days_of_week =?, start_time = ?, end_time = ?, updated_at = NOW(), created_by = ? WHERE deal_id = ?";

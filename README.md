@@ -26,8 +26,8 @@ GrubGoblin is a full-stack web application under development, designed to empowe
 
 ## Documentation
 
-- [API Documentation](docs/Postman) **Coming soon**
-- [Javadoc Documentation](docs/JavaDoc) **Coming soon**
+- [API Documentation](docs/Postman)
+- [Javadoc Documentation](docs/JavaDoc)
 
 
 ## Reporting Bugs

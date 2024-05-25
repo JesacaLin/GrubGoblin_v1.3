@@ -18,10 +18,23 @@ import java.util.List;
 @Component
 public class PlaceDAO {
     private JdbcTemplate jdbcTemplate;
+
+    /**
+     * Constructs a new PlaceDAO with the given DataSource.
+     *
+     * @param dataSource the DataSource to use for database access
+     */
     public PlaceDAO(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+     /**
+     * Retrieves a Place by its ID.
+     *
+     * @param id the ID of the Place to retrieve
+     * @return the Place with the given ID, or null if no such Place exists
+     * @throws DaoException if a database access error occurs
+     */
     public Place getPlaceById(int id) {
         try {
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT * FROM place WHERE place_id = ?", id);
@@ -34,6 +47,12 @@ public class PlaceDAO {
         return null;
     }
 
+    /**
+     * Retrieves all Places.
+     *
+     * @return a list of all Places
+     * @throws DaoException if a database access error occurs
+     */
     public List<Place> getAllPlaces() {
         List<Place> places = new ArrayList<>();
         try {
@@ -47,6 +66,13 @@ public class PlaceDAO {
         }
     }
 
+     /**
+     * Creates a new Place.
+     *
+     * @param place the Place to create
+     * @return the created Place
+     * @throws DaoException if a database access error occurs or if the Place data violates database constraints
+     */
     public Place createPlace(Place place) {
         Place newPlace = null;
         String sql = "INSERT INTO place (place_name, address, latitude, longitude, google_rating)" + "VALUES (?, ?, ?, ?, ? ) RETURNING place_id";
@@ -62,6 +88,14 @@ public class PlaceDAO {
         return newPlace;
     }
 
+    /**
+     * Updates a Place.
+     *
+     * @param id the ID of the Place to update
+     * @param place the Place data to update
+     * @return the updated Place
+     * @throws DaoException if a database access error occurs, if the Place data violates database constraints, or if no rows were affected by the update
+     */
     public Place updatePlace(int id, Place place) {
         Place updatedPlace = null;
         String sql = "UPDATE place SET place_name = ?, address = ?, latitude = ?, longitude = ?, google_rating = ? WHERE place_id = ?";
@@ -81,6 +115,13 @@ public class PlaceDAO {
         return updatedPlace;
     }
 
+    /**
+     * Deletes a Place by its ID.
+     *
+     * @param placeId the ID of the Place to delete
+     * @return the number of rows affected by the delete
+     * @throws DaoException if a database access error occurs or if the Place data violates database constraints
+     */
     public int deletePlaceById(int placeId) {
         int numOfRows = 0;
         try {
@@ -93,6 +134,12 @@ public class PlaceDAO {
         return numOfRows;
     }
 
+    /**
+     * Maps a SqlRowSet to a Place.
+     *
+     * @param rowSet the SqlRowSet to map
+     * @return the mapped Place
+     */
     private Place mapRowToPlace (SqlRowSet rowSet) {
         Place place = new Place();
         place.setPlaceId(rowSet.getInt("place_id"));

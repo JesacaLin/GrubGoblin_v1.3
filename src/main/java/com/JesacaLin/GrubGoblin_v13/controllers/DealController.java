@@ -70,7 +70,7 @@ public class DealController {
      *
      * @param deal the Deal data to update
      * @param principal the authenticated user
-     * @return the updated Deal
+     * @return the updated Deal if authenticated user is the same as the creator.
      */
     @PreAuthorize("hasAuthority('contributor') or hasAuthority('admin')")
     @PutMapping("/{id}")

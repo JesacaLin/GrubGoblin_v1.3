@@ -2,8 +2,10 @@ package com.JesacaLin.GrubGoblin_v13.controllers;
 
 import com.JesacaLin.GrubGoblin_v13.daos.ReviewDAO;
 import com.JesacaLin.GrubGoblin_v13.models.Review;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
@@ -68,11 +70,18 @@ public class ReviewController {
      *
      * @param id the ID of the Review to update
      * @param review the Review data to update
-     * @return the updated Review
+     * @return the updated Review if authorized person matches the creator of the review
      */
     @PreAuthorize("hasAuthority('contributor') or hasAuthority('admin')")
     @PutMapping("/{id}")
-    public Review updateReview(@PathVariable int id, @RequestBody Review review) {
+    public Review updateReview(@PathVariable int id, @RequestBody Review review, Principal principal) {
+        Review existingReview = reviewDAO.getReviewById(id);
+        if (existingReview == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Review not found");
+        }
+        if (!existingReview.getReviewedBy().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to review this deal");
+        }
         return reviewDAO.updateReview(id, review);
     }
 

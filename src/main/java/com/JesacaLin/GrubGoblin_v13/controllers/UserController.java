@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -71,11 +72,18 @@ public class UserController {
      *
      * @param username the username of the User to update
      * @param user the User data to update
-     * @return the updated User
+     * @return the updated User if the authorized user is same user.
      */
     @PreAuthorize("hasAuthority('contributor') or hasAuthority('admin')")
     @PutMapping("/{username}")
-    public User updateUser(@PathVariable String username, @RequestBody User user) {
+    public User updateUser(@PathVariable String username, @RequestBody User user, Principal principal) {
+        User existingUser = userDAO.getUserByUsername(username);
+        if (existingUser == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        if (!existingUser.getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not authorized to update this user");
+        }
         return userDAO.updateUser(username, user);
     }
 

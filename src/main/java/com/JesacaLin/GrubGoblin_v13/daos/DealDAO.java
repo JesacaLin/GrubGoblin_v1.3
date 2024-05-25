@@ -107,7 +107,7 @@ public class DealDAO {
  *            - createdBy: the user that created the deal (**This field cannot be updated**)
  *
  * @return the newly updated deal with edits added.
- * @throws DaoException if unable to connect to the server/database, data integrity violation (e.g., placeId doesn't exist in the 'places' table), or if the updating user is not the creator of the deal.
+ * @throws DaoException if unable to connect to the server/database, data integrity violation (e.g., placeId doesn't exist in the 'places' table).
  */
     public Deal updateDeal(Deal deal) {
         Deal updatedDeal = null;

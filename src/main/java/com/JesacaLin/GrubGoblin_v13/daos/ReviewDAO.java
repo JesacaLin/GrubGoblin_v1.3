@@ -12,13 +12,29 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO class for managing Review entities in the database.
+ */
 @Component
 public class ReviewDAO {
     private JdbcTemplate jdbcTemplate;
+
+     /**
+     * Constructs a new ReviewDAO with the given DataSource.
+     *
+     * @param dataSource the DataSource to use for database access
+     */
     public ReviewDAO(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    /**
+     * Retrieves a Review by its ID.
+     *
+     * @param reviewId the ID of the Review to retrieve
+     * @return the Review with the given ID, or null if no such Review exists
+     * @throws DaoException if a database access error occurs
+     */
     public Review getReviewById (int reviewId) {
         try {
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet("SELECT * FROM review WHERE review_id = ?", reviewId);
@@ -31,6 +47,12 @@ public class ReviewDAO {
         return null;
     }
 
+    /**
+     * Retrieves all Reviews.
+     *
+     * @return a list of all Reviews
+     * @throws DaoException if a database access error occurs
+     */
     public List<Review> getAllReviews() {
         List<Review> reviews = new ArrayList<>();
         try {
@@ -44,6 +66,14 @@ public class ReviewDAO {
         return reviews;
     }
 
+    /**
+     * Creates a new Review.
+     *
+     * @param review the Review to create
+     * @param dealId the ID of the deal associated with the review
+     * @return the created Review
+     * @throws DaoException if a database access error occurs or if the Review data violates database constraints
+     */
     public Review createReview(Review review, int dealId) {
         Review newReview = null;
         String sql = "INSERT INTO review (deal_id, stars, review_description, reviewed_by)" + "VALUES (?, ?, ?, ? ) RETURNING review_id";
@@ -58,6 +88,14 @@ public class ReviewDAO {
         return newReview;
     }
 
+     /**
+     * Updates a Review.
+     *
+     * @param id the ID of the Review to update
+     * @param review the Review data to update
+     * @return the updated Review
+     * @throws DaoException if a database access error occurs, if the Review data violates database constraints, or if no rows were affected by the update
+     */
     public Review updateReview(int id, Review review) {
         Review updatedReview = null;
         String sql = "UPDATE review SET deal_id = ?, stars = ?, review_description = ?, reviewed_by = ? WHERE review_id = ?";
@@ -77,6 +115,13 @@ public class ReviewDAO {
         return updatedReview;
     }
 
+    /**
+     * Deletes a Review by its ID.
+     *
+     * @param reviewId the ID of the Review to delete
+     * @return the number of rows affected by the delete
+     * @throws DaoException if a database access error occurs or if the Review data violates database constraints
+     */
     public int deleteReviewById(int reviewId) {
         int numOfRows = 0;
         try {
@@ -89,6 +134,13 @@ public class ReviewDAO {
         return numOfRows;
     }
 
+    /**
+     * Retrieves all Reviews for a specific deal.
+     *
+     * @param dealId the ID of the deal to retrieve Reviews for
+     * @return a list of all Reviews for the specified deal
+     * @throws DaoException if a database access error occurs
+     */
     public List<Review> getAllReviewsByDealId(int dealId) {
         List<Review> reviews = new ArrayList<>();
         try {
@@ -102,6 +154,12 @@ public class ReviewDAO {
         return reviews;
     }
 
+    /**
+     * Maps a SqlRowSet to a Review.
+     *
+     * @param rowSet the SqlRowSet to map
+     * @return the mapped Review
+     */
     public Review mapRowToReview (SqlRowSet rowSet) {
         Review review = new Review();
         review.setReviewId(rowSet.getInt("review_id"));

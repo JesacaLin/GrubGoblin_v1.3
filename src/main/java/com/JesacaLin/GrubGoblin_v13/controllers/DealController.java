@@ -5,7 +5,6 @@ import com.JesacaLin.GrubGoblin_v13.models.Deal;
 import com.JesacaLin.GrubGoblin_v13.viewmodels.FullDealDetails;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.yaml.snakeyaml.events.Event;
 
 import java.security.Principal;
 import java.util.List;
@@ -19,7 +18,6 @@ public class DealController {
         this.dealDAO = dealDAO;
     }
 
-//    @PreAuthorize("isAuthenticated()")
     @GetMapping("")
     public List<Deal> listOfDeals() {
         return dealDAO.getAllDeals();
@@ -30,7 +28,7 @@ public class DealController {
         return dealDAO.getDealById(id);
     }
 
-
+    @PreAuthorize("hasAuthority('contributor') or hasAuthority('admin')")
     @PostMapping
     public Deal createDeal(@RequestBody Deal deal, Principal principal) {
         String userName = principal.getName();
@@ -38,6 +36,7 @@ public class DealController {
         return dealDAO.createDeal(deal);
     }
 
+    @PreAuthorize("hasAuthority('contributor') or hasAuthority('admin')")
     @PutMapping("/{id}")
     public Deal updateDeal(@RequestBody Deal deal) {
         return dealDAO.updateDeal(deal);

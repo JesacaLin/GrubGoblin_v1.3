@@ -15,23 +15,22 @@ GrubGoblin is a full-stack web application under development, designed to empowe
 - **Advanced Search**: Empowers users to search for deals by day, type (food, drinks, etc.), location, rating (including top-rated), and reviews.
 - **Review System**: Allows users to leave reviews on deals, fostering a collaborative community around food exploration.
 - **Early Stage Google Maps Integration**: Utilizes the Google Maps API to convert addresses to latitude and longitude coordinates, laying the groundwork for future location-based features.
+- **Comprehensive API Documentation**: GrubGoblin provides detailed API documentation, outlining all available endpoints and their functionalities related to deal management, user authentication, reviews, etc.
 
 ## Envisioned Future
 
 - **Frontend Development**: A full-featured frontend will be built with HTML, CSS, JavaScript, and Vue.js, culminating in a Progressive Web App (PWA) for an exceptional user experience on mobile and desktop.
 - **Social Sharing**: An integrated social aspect will allow users to share their favorite deals with neighbors, fostering community and restaurant discovery.
-- **Location-Based Search**: Leveraging Google Maps integration, users will be able to discover nearby deals based on their current location.
-- **Comprehensive API Documentation (Coming Soon)**: GrubGoblin will provide detailed API documentation upon project completion, outlining all available endpoints and their functionalities related to deal management, user authentication, and reviews.
+- **Location-Based Search**: Leveraging Google Maps integration, users can discover nearby deals based on their current location.
 
 
 ## Documentation
 
-- **API Documentation:** [JSON](docs/Postman) | <a href="https://documenter.getpostman.com/view/20762475/2sA3QqhDgH" target="_blank">Postman</a>
-- [Postman](https://documenter.getpostman.com/view/20762475/2sA3QqhDgH)
+- **API Documentation:** [JSON](docs/Postman) | [Postman](https://documenter.getpostman.com/view/20762475/2sA3QqhDgH)
 - [Javadoc Documentation](docs/JavaDoc)
 
 
 ## Reporting Bugs
 
-We encourage you to report any bugs or issues you encounter. Please submit them through the GitHub issue tracker for this project.
+Please report any bugs or issues you encounter. Please submit them through the GitHub issue tracker for this project.
 

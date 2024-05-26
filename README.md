@@ -4,8 +4,8 @@ GrubGoblin is a full-stack web application under development, designed to empowe
 
 ## Technical Stack
 
-- **Backend**: Leverages a powerful RESTful API built with Spring Boot for efficient data management and a clean separation of concerns. 
-- **Database**: Employs PostgreSQL, a powerful relational database, for secure and scalable data storage of food deals, user information, location information, and reviews.
+- **Backend**: Leverages a RESTful API built with Spring Boot for efficient data management. 
+- **Database**: Employs PostgreSQL, a relational database, for secure and scalable data storage of food deals, user information, location information, and reviews.
 - **Model-View-Controller (MVC)**: Implements the MVC design pattern to ensure clean separation of concerns and maintainability between the data (Model), presentation (View), and user interaction (Controller) layers of the application.
 - **Authentication**: Enforces secure user access with robust authentication mechanisms, ensuring only authorized users can access and manage their data.
 

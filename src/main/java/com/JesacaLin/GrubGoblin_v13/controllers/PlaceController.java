@@ -79,7 +79,7 @@ public class PlaceController {
      */
     @PreAuthorize("hasAuthority('admin')")
     @DeleteMapping("/{id}")
-    public int deleteUser(@PathVariable int id) {
+    public int deletePlaceById(@PathVariable int id) {
         return placeDAO.deletePlaceById(id);
     }
 }

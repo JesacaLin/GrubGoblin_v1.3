@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Controller for managing User entities.
  */
-@PreAuthorize("isAuthenticated()")
+
 @RestController
 @RequestMapping("/app_user")
 public class UserController {
@@ -45,7 +45,7 @@ public class UserController {
      * @param username the username of the User to retrieve
      * @return the User with the given username
      */
-    @PreAuthorize("hasAuthority('contributor') or hasAuthority('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     @GetMapping("/{username}")
     public User getUserByUsername(@PathVariable String username) {
         User user = userDAO.getUserByUsername(username);
@@ -61,7 +61,6 @@ public class UserController {
      * @param user the User to create
      * @return the created User
      */
-    @PreAuthorize("hasAuthority('contributor') or hasAuthority('admin')")
     @PostMapping
     public User createUser(@RequestBody User user) {
         return userDAO.createUser(user);

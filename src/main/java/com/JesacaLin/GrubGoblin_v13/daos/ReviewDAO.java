@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * DAO class for managing Review entities in the database.
  */
+@PreAuthorize("isAuthenticated()")
 @Component
 public class ReviewDAO {
     private JdbcTemplate jdbcTemplate;
@@ -74,6 +76,7 @@ public class ReviewDAO {
      * @return the created Review
      * @throws DaoException if a database access error occurs or if the Review data violates database constraints
      */
+    @PreAuthorize("hasAuthority('contributor') or hasAuthority('admin')")
     public Review createReview(Review review, int dealId) {
         Review newReview = null;
         String sql = "INSERT INTO review (deal_id, stars, review_description, reviewed_by)" + "VALUES (?, ?, ?, ? ) RETURNING review_id";
@@ -96,6 +99,7 @@ public class ReviewDAO {
      * @return the updated Review
      * @throws DaoException if a database access error occurs, if the Review data violates database constraints, or if no rows were affected by the update
      */
+     @PreAuthorize("hasAuthority('contributor') or hasAuthority('admin')")
     public Review updateReview(int id, Review review) {
         Review updatedReview = null;
         String sql = "UPDATE review SET deal_id = ?, stars = ?, review_description = ?, reviewed_by = ? WHERE review_id = ?";
@@ -122,6 +126,7 @@ public class ReviewDAO {
      * @return the number of rows affected by the delete
      * @throws DaoException if a database access error occurs or if the Review data violates database constraints
      */
+    @PreAuthorize("hasAuthority('admin')")
     public int deleteReviewById(int reviewId) {
         int numOfRows = 0;
         try {
